@@ -1,4 +1,8 @@
 <script>
+// Componente principale della chat.
+// Gestisce invio messaggi, risposte, inoltri, caricamento messaggi e interazione con l'utente.
+// Si collega ai servizi sendMessage, replyMessage, forwardMessage, getConversation.
+
 import { getConversation, sendMessage, leaveGroup, replyMessage, setGroupPhoto } from "@/services/axios";
 import Message from './Message.vue';
 
@@ -277,6 +281,7 @@ export default {
 </template>
 
 <style scoped>
+@import '../assets/style.css';
 .flex-grow-1 {
 	overflow-y: auto;
 	max-height: calc(100vh - 150px);

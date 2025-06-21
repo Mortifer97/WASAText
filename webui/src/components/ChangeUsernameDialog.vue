@@ -1,27 +1,29 @@
 <template>
+    <!-- Dialog per cambiare username. -->
+    <!-- Sintassi base, commenti in italiano. -->
     <div v-if="isOpen" class="modal fade show d-block" tabindex="-1" role="dialog" aria-labelledby="changeUsernameLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="changeUsernameLabel">Change Username</h5>
+            <h5 class="modal-title" id="changeUsernameLabel">Cambia Username</h5>
             <button type="button" class="btn-close" aria-label="Close" @click="closeDialog"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="submitUsernameChange">
               <div class="mb-3">
-                <label for="usernameInput" class="form-label">New Username</label>
+                <label for="usernameInput" class="form-label">Nuovo Username</label>
                 <input
                   type="text"
                   id="usernameInput"
                   class="form-control"
                   v-model="newUsername"
-                  placeholder="Enter new username"
+                  placeholder="Inserisci il nuovo username"
                   required
                 />
               </div>
               <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-secondary me-2" @click="closeDialog">Cancel</button>
-                <button type="submit" class="btn btn-primary">Change</button>
+                <button type="button" class="btn btn-secondary me-2" @click="closeDialog">Annulla</button>
+                <button type="submit" class="btn btn-primary">Cambia</button>
               </div>
             </form>
           </div>
@@ -51,7 +53,7 @@
       },
       submitUsernameChange() {
         if (this.newUsername.trim() === "") {
-          alert("Username cannot be empty.");
+          alert("L'username non può essere vuoto.");
           return;
         }
         this.$emit("username-changed", this.newUsername.trim());
@@ -62,6 +64,7 @@
   </script>
   
   <style scoped>
+  @import '../assets/style.css';
   .modal-backdrop {
     z-index: 1040;
   }
@@ -69,5 +72,10 @@
   .modal {
     z-index: 1050;
   }
+  .modal-content, .modal-body, .modal-header, .modal-footer {
+    background: var(--color-bg-secondary) !important;
+    color: var(--color-fg) !important;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+  }
   </style>
-  

@@ -1,24 +1,8 @@
-package api
+package database
 
 import (
 	"time"
 )
-
-// Conversation represent a conversation object
-type Conversation struct {
-	ConversationId int64        `json:"conversationId"`
-	Name           string       `json:"name"`
-	Photo          []byte       `json:"photo,omitempty"`
-	LastMessage    *LastMessage `json:"lastMessage,omitempty"`
-	Type           string       `json:"type"`
-}
-
-// LastMessage represents the details of the last message in a conversation
-type LastMessage struct {
-	MessageID int64     `json:"messageId"`
-	Timestamp time.Time `json:"timestamp"`
-	Preview   string    `json:"preview"`
-}
 
 // Message represents a single message in a conversation.
 type Message struct {
@@ -47,9 +31,21 @@ type User struct {
 	Photo  []byte `json:"photo,omitempty"`
 }
 
-// Group represents a single group.
-type Group struct {
-	GroupId int64  `json:"groupId"`
-	Name    string `json:"name"`
-	Photo   []byte `json:"photo,omitempty"`
+// Conversation represent a conversation object
+type Conversation struct {
+	ConversationId int64        `json:"conversationId"`
+	Name           string       `json:"name"`
+	Photo          []byte       `json:"photo,omitempty"`
+	LastMessage    *LastMessage `json:"lastMessage,omitempty"`
+	Type           string       `json:"type"`
 }
+
+// LastMessage represents the details of the last message in a conversation
+type LastMessage struct {
+	MessageID int64     `json:"messageId"`
+	Timestamp time.Time `json:"timestamp"`
+	Preview   string    `json:"preview"`
+}
+
+// Funzioni per la gestione utenti: creazione, ricerca, aggiornamento username, verifica presenza in conversazione.
+// Si collegano agli handler postSession, putUsername, searchUsers.

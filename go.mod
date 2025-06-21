@@ -1,4 +1,4 @@
-module github.com/LorenzoSabatino/WASAText
+module github.com/Mortifer97/WASAText
 
 go 1.17
 

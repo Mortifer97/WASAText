@@ -1,4 +1,6 @@
 <template>
+    <!-- Dialog per creare un nuovo gruppo. -->
+    <!-- Sintassi base, commenti in italiano. -->
     <div
       class="modal fade"
       tabindex="-1"
@@ -10,22 +12,22 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="newGroupModalLabel">Create New Group</h5>
+            <h5 class="modal-title" id="newGroupModalLabel">Crea Nuovo Gruppo</h5>
             <button type="button" class="btn-close" @click="close"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              <label for="groupName" class="form-label">Group Name</label>
+              <label for="groupName" class="form-label">Nome Gruppo</label>
               <input
                 type="text"
                 id="groupName"
                 class="form-control"
                 v-model="groupName"
-                placeholder="Enter group name"
+                placeholder="Inserisci nome gruppo"
               />
             </div>
             <div class="mb-3">
-              <label class="form-label">Select Users</label>
+              <label class="form-label">Seleziona Utenti</label>
               <div class="user-list">
                 <div
                   v-for="user in searchResults"
@@ -35,11 +37,11 @@
                 >
                 <div class="d-flex align-items-center">
                   <div class="user-photo me-3">
-                  <img v-if="user.photo" :src="`data:image/png;base64,${user.photo}`" alt="User Photo" />
+                  <img v-if="user.photo" :src="`data:image/png;base64,${user.photo}`" alt="Foto Utente" />
                   <i v-else class="bi bi-person-circle" style="font-size: 30px;"></i>
                   </div>
                   <span>{{ user.name }}</span>
-                  <span v-if="user.userId == userId" class="badge">YOU</span>
+                  <span v-if="user.userId == userId" class="badge">TU</span>
                 </div>
                 <input
                   type="checkbox"
@@ -52,14 +54,14 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="close">Close</button>
+            <button type="button" class="btn btn-secondary" @click="close">Chiudi</button>
             <button
               type="button"
               class="btn btn-primary"
               @click="createGroup"
               :disabled="!groupName || selectedUsers.length === 0"
             >
-              Create Group
+              Crea Gruppo
             </button>
           </div>
         </div>
@@ -83,7 +85,7 @@
         modal.show();
         this.reset();
 
-        // Get userId from localStorage
+        // Ottieni userId da localStorage
         const userId = localStorage.getItem("userId");
         this.userId = userId;
         this.search();
@@ -109,11 +111,11 @@
       },
       async search() {
         try {
-          console.log("Searching users");
+          console.log("Ricerca utenti");
           const results = await searchUsers(this.userId, "");
           this.searchResults = results;
         } catch (error) {
-          console.error("Error searching users:", error);
+          console.error("Errore durante la ricerca degli utenti:", error);
         }
       },
       isSelected(user) {
@@ -121,15 +123,15 @@
       },
       toggleUserSelection(user) {
         if (user.userId == this.userId) {
-            alert("You cannot deselect yourself. You are already in the group.");
+            alert("Non puoi deselezionare te stesso. Sei già nel gruppo.");
           return;
         }
         const index = this.selectedUsers.findIndex(selectedUser => selectedUser.userId === user.userId);
         if (index === -1) {
-          // Add user if not selected
+          // Aggiungi utente se non selezionato
           this.selectedUsers.push(user);
         } else {
-          // Remove user if already selected
+          // Rimuovi utente se già selezionato
           this.selectedUsers.splice(index, 1);
         }
       },
@@ -138,6 +140,13 @@
   </script>
   
 <style scoped>
+@import '../assets/style.css';
+.modal-content, .modal-body, .modal-header, .modal-footer {
+  background: var(--color-bg-secondary) !important;
+  color: var(--color-fg) !important;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
   .modal-content {
     border-radius: 0.5rem;
   }
@@ -153,8 +162,8 @@
     border-bottom: none;
   }
   .user-photo img {
-    width: 40px;
-    height: 40px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     border-radius: 50%;
   }
@@ -167,4 +176,3 @@
     margin-left: 10px;
   }
 </style>
-  

@@ -1,4 +1,6 @@
 <template>
+  <!-- Dialog per cercare utenti. -->
+  <!-- Sintassi base, commenti in italiano. -->
   <div
     class="modal fade"
     tabindex="-1"
@@ -146,12 +148,13 @@
   </script>
   
 <style scoped>
+@import '../assets/style.css';
   .list-group-item-primary {
-    background-color: #cce5ff;
+    background-color: #181818;
   }
   
   .list-group-item-primary:hover {
-    background-color: #b8daff;
+    background-color: #5e5e5e;
   }
 
   .modal-content {
@@ -164,4 +167,11 @@
     object-fit: cover;
     border-radius: 50%;
   }
+
+  .modal-content, .modal-body, .modal-header, .modal-footer {
+  background: var(--color-bg-secondary) !important;
+  color: var(--color-fg) !important;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
  </style>

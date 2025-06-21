@@ -3,11 +3,12 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/ardanlabs/conf"
-	"gopkg.in/yaml.v2"
 	"io"
 	"os"
 	"time"
+
+	"github.com/ardanlabs/conf"
+	"gopkg.in/yaml.v2"
 )
 
 // WebAPIConfiguration describes the web API configuration. This structure is automatically parsed by
@@ -25,7 +26,8 @@ type WebAPIConfiguration struct {
 	}
 	Debug bool
 	DB    struct {
-		Filename string `conf:"default:/tmp/decaf.db"`
+		Filename string `conf:"default:/tmp/decaf.db"` //linux
+		//Filename string `conf:"default:demo/decaf.db"` //windows
 	}
 }
 

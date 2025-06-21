@@ -1,4 +1,6 @@
 <script>
+  // Componente lista conversazioni.
+  // Mostra tutte le conversazioni e gestisce la selezione.
   import Conversation from "@/components/Conversation.vue";
   
   export default {
@@ -52,8 +54,8 @@
 </template>
   
 <style scoped>
+@import '../assets/style.css';
   .border-bottom {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #000000;
   }
 </style>
-  

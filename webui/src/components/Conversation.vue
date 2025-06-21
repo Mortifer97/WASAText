@@ -1,28 +1,30 @@
 <template>
+	<!-- Componente per una singola conversazione nella lista. -->
+	<!-- Sintassi base, commenti in italiano. -->
 	<li
 	  class="list-group-item list-group-item-action"
 	  :class="{ active: isActive }"
 	  @click="selectConversation"
 	>
 	  <div class="d-flex align-items-center">
-		<!-- Profile Photo or Group Icon -->
+		<!-- Foto profilo o icona gruppo -->
 		<img
 		  v-if="conversation.photo"
 		  :src="`data:image/png;base64,${conversation.photo}`"
-		  alt="Profile Photo"
+		  alt="Foto profilo"
 		  class="rounded-circle me-3"
 		  style="width: 40px; height: 40px; object-fit: cover;"
 		/>
 		<i v-else class="bi bi-person-circle me-3" style="font-size: 30px;"></i>
 		
 		<div>
-		  <!-- Conversation Name -->
+		  <!-- Nome conversazione -->
 		  <h5 class="mb-1">{{ conversation.name }}</h5>
-		  <!-- Message Preview -->
+		  <!-- Anteprima messaggio -->
 		  <p class="mb-0 text-truncate">
 			{{ getLastMessagePreview(conversation) }}
 		  </p>
-		  <!-- Timestamp of Latest Message -->
+		  <!-- Timestamp ultimo messaggio -->
 		  <small 
 		 	:class="{ 'text-muted': !isActive, 'text-white': isActive }" 
 		  >{{ formatTimestamp(conversation.lastMessage?.timestamp) }}</small>
@@ -50,30 +52,31 @@
 	  getLastMessagePreview(conversation) {
 		if (conversation.lastMessage) {
 			const lastMessage = conversation.lastMessage;
-			// If the last message is a photo, return a specific icon or message
+			// Se l'ultimo messaggio è una foto, restituisci un'icona o un messaggio specifico
 			if (!lastMessage.preview) {
-			return "📸 Photo message";
+			return "📸 Messaggio foto";
 			}
-			// Truncate the preview if it's longer than 28 characters
+			// Trunca l'anteprima se è più lunga di 28 caratteri
 			if (lastMessage.preview.length > 28) {
 				return lastMessage.preview.substring(0, 28) + '...';
 			}
 			return lastMessage.preview;
 		}
-		return 'No message yet';
+		return 'Nessun messaggio ancora';
 	  },
 	  formatTimestamp(timestamp) {
 		if (timestamp) {
 			const date = new Date(timestamp);
-			return date.toLocaleString(); // Format timestamp into a readable date
+			return date.toLocaleString(); // Formatta il timestamp in una data leggibile
 		}
-		return 'No timestamp';
+		return 'Nessun timestamp';
 	  },
 	},
   };
   </script>
   
   <style scoped>
+  @import '../assets/style.css';
   .list-group-item {
 	cursor: pointer;
   }
@@ -87,4 +90,3 @@
 	text-overflow: ellipsis;
   }
   </style>
-  

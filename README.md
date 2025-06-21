@@ -1,115 +1,141 @@
 # Fantastic coffee (decaffeinated)
 
-This repository contains the basic structure for [Web and Software Architecture](http://gamificationlab.uniroma1.it/en/wasa/) homework project.
-It has been described in class.
+Questo repository contiene la struttura base per il progetto d'esame di [Web and Software Architecture](http://gamificationlab.uniroma1.it/en/wasa/).
+È stato descritto a lezione.
 
-"Fantastic coffee (decaffeinated)" is a simplified version for the WASA course, not suitable for a production environment.
-The full version can be found in the "Fantastic Coffee" repository.
+"Fantastic coffee (decaffeinated)" è una versione semplificata per il corso WASA, non adatta a un ambiente di produzione.
+La versione completa si trova nel repository "Fantastic Coffee".
 
-## Project structure
+## Struttura del progetto
 
-* `cmd/` contains all executables; Go programs here should only do "executable-stuff", like reading options from the CLI/env, etc.
-	* `cmd/healthcheck` is an example of a daemon for checking the health of servers daemons; useful when the hypervisor is not providing HTTP readiness/liveness probes (e.g., Docker engine)
-	* `cmd/webapi` contains an example of a web API server daemon
-* `demo/` contains a demo config file
-* `doc/` contains the documentation (usually, for APIs, this means an OpenAPI file)
-* `service/` has all packages for implementing project-specific functionalities
-	* `service/api` contains an example of an API server
-	* `service/globaltime` contains a wrapper package for `time.Time` (useful in unit testing)
-* `vendor/` is managed by Go, and contains a copy of all dependencies
-* `webui/` is an example of a web frontend in Vue.js; it includes:
+* `cmd/` contiene tutti gli eseguibili; i programmi Go qui devono solo fare "cose da eseguibile", come leggere opzioni da CLI/env, ecc.
+	* `cmd/healthcheck` è un esempio di demone per controllare la salute dei server; utile quando l'hypervisor non fornisce probe HTTP readiness/liveness (es. Docker engine)
+	* `cmd/webapi` contiene un esempio di demo server API web
+* `demo/` contiene un file di configurazione demo
+* `doc/` contiene la documentazione (di solito, per le API, un file OpenAPI)
+* `service/` contiene tutti i package per le funzionalità specifiche del progetto
+	* `service/api` contiene un esempio di server API
+	* `service/globaltime` contiene un package wrapper per `time.Time` (utile nei test unitari)
+* `vendor/` è gestita da Go e contiene una copia di tutte le dipendenze
+* `webui/` è un esempio di frontend web in Vue.js; include:
 	* Bootstrap JavaScript framework
-	* a customized version of "Bootstrap dashboard" template
-	* feather icons as SVG
-	* Go code for release embedding
+	* una versione personalizzata del template "Bootstrap dashboard"
+	* feather icons come SVG
+	* codice Go per l'embedding in release
 
-Other project files include:
-* `open-node.sh` starts a new (temporary) container using `node:20` image for safe and secure web frontend development (you don't want to use `node` in your system, do you?).
+Altri file del progetto includono:
+* `open-node.sh` avvia un nuovo container (temporaneo) usando l'immagine `node:20` per uno sviluppo frontend sicuro (non vuoi usare node nel tuo sistema, vero?).
 
 ## Go vendoring
 
-This project uses [Go Vendoring](https://go.dev/ref/mod#vendoring). You must use `go mod vendor` after changing some dependency (`go get` or `go mod tidy`) and add all files under `vendor/` directory in your commit.
+Questo progetto usa [Go Vendoring](https://go.dev/ref/mod#vendoring). Devi usare `go mod vendor` dopo aver cambiato una dipendenza (`go get` o `go mod tidy`) e aggiungere tutti i file nella cartella `vendor/` al commit.
 
-For more information about vendoring:
+Per maggiori informazioni sul vendoring:
 
 * https://go.dev/ref/mod#vendoring
 * https://www.ardanlabs.com/blog/2020/04/modules-06-vendoring.html
 
 ## Node/YARN vendoring
 
-This repository uses `yarn` and a vendoring technique that exploits the ["Offline mirror"](https://yarnpkg.com/features/caching). As for the Go vendoring, the dependencies are inside the repository.
+Questo repository usa `yarn` e una tecnica di vendoring che sfrutta lo ["Offline mirror"](https://yarnpkg.com/features/caching). Come per il vendoring Go, le dipendenze sono dentro il repository.
 
-You should commit the files inside the `.yarn` directory.
+Devi fare commit dei file dentro la cartella `.yarn`.
 
-## How to set up a new project from this template
+## Come impostare un nuovo progetto da questo template
 
-You need to:
+Devi:
 
-* Change the Go module path to your module path in `go.mod`, `go.sum`, and in `*.go` files around the project
-* Rewrite the API documentation `doc/api.yaml`
-* If no web frontend is expected, remove `webui` and `cmd/webapi/register-webui.go`
-* Update top/package comment inside `cmd/webapi/main.go` to reflect the actual project usage, goal, and general info
-* Update the code in `run()` function (`cmd/webapi/main.go`) to connect to databases or external resources
-* Write API code inside `service/api`, and create any further package inside `service/` (or subdirectories)
+* Cambiare il path del modulo Go in `go.mod`, `go.sum` e nei file `*.go` nel progetto
+* Riscrivere la documentazione API in `doc/api.yaml`
+* Se non serve il frontend web, rimuovi `webui` e `cmd/webapi/register-webui.go`
+* Aggiorna il commento top/package dentro `cmd/webapi/main.go` per riflettere l'uso reale del progetto
+* Aggiorna il codice nella funzione `run()` (`cmd/webapi/main.go`) per connetterti a database o risorse esterne
+* Scrivi il codice API dentro `service/api` e crea altri package dentro `service/` (o sottocartelle)
 
-## How to build
+## Come compilare
 
-If you're not using the WebUI, or if you don't want to embed the WebUI into the final executable, then:
+Se non usi la WebUI, o non vuoi includerla nell'eseguibile finale:
 
 ```shell
 go build ./cmd/webapi/
 ```
 
-If you're using the WebUI and you want to embed it into the final executable:
+Se usi la WebUI e vuoi includerla nell'eseguibile finale:
 
 ```shell
 ./open-node.sh
-# (here you're inside the container)
+# (qui sei dentro il container)
 yarn run build-embed
 exit
-# (outside the container)
+# (fuori dal container)
 go build -tags webui ./cmd/webapi/
 ```
 
-## How to run (in development mode)
+## Come eseguire (in modalità sviluppo)
 
-You can launch the backend only using:
+Puoi avviare solo il backend usando:
 
 ```shell
 go run ./cmd/webapi/
 ```
 
-If you want to launch the WebUI, open a new tab and launch:
+Se vuoi avviare la WebUI, apri una nuova tab e lancia:
 
 ```shell
 ./open-node.sh
-# (here you're inside the container)
+# (qui sei dentro il container)
 yarn run dev
 ```
 
-## How to build for production / homework delivery
+## Come compilare per la produzione / consegna
 
 ```shell
 ./open-node.sh
-# (here you're inside the container)
+# (qui sei dentro il container)
 yarn run build-prod
 ```
 
-For "Web and Software Architecture" students: before committing and pushing your work for grading, please read the section below named "My build works when I use `yarn run dev`, however there is a Javascript crash in production/grading"
+Per gli studenti di "Web and Software Architecture": prima di fare commit e push per la valutazione, leggi la sezione sotto chiamata "My build works when I use `yarn run dev`, however there is a Javascript crash in production/grading"
 
-## Known issues
+## Problemi noti
 
 ### My build works when I use `yarn run dev`, however there is a Javascript crash in production/grading
 
-Some errors in the code are somehow not shown in `vite` development mode. To preview the code that will be used in production/grading settings, use the following commands:
+Alcuni errori nel codice non vengono mostrati in modalità sviluppo `vite`. Per vedere il codice che sarà usato in produzione/valutazione, usa questi comandi:
 
 ```shell
 ./open-node.sh
-# (here you're inside the container)
+# (qui sei dentro il container)
 yarn run build-prod
 yarn run preview
 ```
 
-## License
+# WASAText
+Progetto esame 2025 sessione estiva
 
-See [LICENSE](LICENSE).
+# parte backend
+go run ./cmd/webapi/ 
+
+# parte frontend
+docker run -it --rm -v "$(pwd):/src" -u "$(id -u):$(id -g)" --network host --workdir /src/webui node:20 /bin/bash
+
+# run in dev mode
+yarn run dev
+# non modificabile esecuzione finale 
+yarn run build-prod
+
+# sul frontend per chiudere
+CTRL + C exit
+
+# sul backend per chiudere
+CTRL + C
+
+# Docker deve essere aperto
+# Docker build
+docker build -f Dockerfile.backend -t wasa-backend .
+docker build -f Dockerfile.frontend -t wasa-frontend .
+
+# Docker run
+docker run -p 3000:3000 wasa-backend
+docker run -p 8080:80 wasa-frontend
+

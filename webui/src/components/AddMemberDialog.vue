@@ -1,4 +1,6 @@
 <template>
+    <!-- Dialog per aggiungere membri a un gruppo. -->
+    <!-- Sintassi base, commenti in italiano. -->
     <div
       class="modal fade"
       tabindex="-1"
@@ -10,12 +12,12 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="addMemberModalLabel">Add Members</h5>
+            <h5 class="modal-title" id="addMemberModalLabel">Aggiungi Membri</h5>
             <button type="button" class="btn-close" @click="close"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              <label class="form-label">Select Users</label>
+              <label class="form-label">Seleziona Utenti</label>
               <div class="user-list">
                 <div
                   v-for="user in searchResults"
@@ -29,7 +31,7 @@
                       <i v-else class="bi bi-person-circle" style="font-size: 30px;"></i>
                     </div>
                     <span>{{ user.name }}</span>
-                    <span v-if="user.userId === userId" class="badge">YOU</span>
+                    <span v-if="user.userId === userId" class="badge">TU</span>
                   </div>
                   <input
                     type="checkbox"
@@ -42,14 +44,14 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="close">Close</button>
+            <button type="button" class="btn btn-secondary" @click="close">Chiudi</button>
             <button
               type="button"
               class="btn btn-primary"
               @click="addMembers"
               :disabled="selectedUsers.length === 0"
             >
-              Add Members
+              Aggiungi Membri
             </button>
           </div>
         </div>
@@ -94,10 +96,10 @@
           const allUsers = await searchUsers(this.userId, "");
           const groupMembers = await getGroupMembers(this.userId, this.conversationId);
 
-          // Filter users to exclude those already in the group
+          // Filtra gli utenti per escludere quelli già nel gruppo
           this.searchResults = allUsers.filter(user => !groupMembers.includes(user.name));
         } catch (error) {
-          console.error("Error searching users:", error);
+          console.error("Errore durante la ricerca degli utenti:", error);
         }
       },
       isSelected(user) {
@@ -107,7 +109,7 @@
       },
       toggleUserSelection(user) {
         if (user.userId === this.userId) {
-          alert("You cannot add yourself. You are already in the group.");
+          alert("Non puoi aggiungere te stesso. Sei già nel gruppo.");
           return;
         }
         const index = this.selectedUsers.findIndex(
@@ -127,7 +129,7 @@
           }
           this.close();
         } catch (error) {
-          console.error("Error adding members:", error);
+          console.error("Errore durante l'aggiunta dei membri:", error);
         }
       },
     },
@@ -135,11 +137,23 @@
   </script>
   
 <style scoped>
-  .user-photo img {
-    width: 40px;
-    height: 40px;
+@import '../assets/style.css';
+  /* Applica lo stile card alle box principali */
+.modal-content, .user-list, .modal-body, .modal-header, .modal-footer {
+  background: var(--color-bg-secondary) !important;
+  color: var(--color-fg) !important;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+.card {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+.user-photo img {
+    width: 70px;
+    height: 70px;
     object-fit: cover;
     border-radius: 50%;
   }
 </style>
-  

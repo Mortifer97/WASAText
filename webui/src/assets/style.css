@@ -1,0 +1,96 @@
+/* GitHub Dark Theme inspired CSS for WASAText webui */
+:root {
+  --color-bg: #0d1117;
+  --color-bg-secondary: #161b22;
+  --color-fg: #c9d1d9;
+  --color-fg-muted: #8b949e;
+  --color-accent: #58a6ff;
+  --color-border: #30363d;
+  --color-btn-bg: #21262d;
+  --color-btn-hover: #30363d;
+  --color-danger: #f85149;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: 'Segoe UI', 'Liberation Sans', Arial, sans-serif;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-fg);
+}
+
+button {
+  background: var(--color-btn-bg);
+  color: var(--color-fg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 6px 16px;
+  margin: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover {
+  background: var(--color-btn-hover);
+}
+
+ul {
+  background: var(--color-bg-secondary);
+  border-radius: 8px;
+  padding: 8px 0;
+  margin: 0 0 16px 0;
+  border: 1px solid var(--color-border);
+}
+
+li {
+  list-style: none;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-fg);
+}
+li:last-child {
+  border-bottom: none;
+}
+
+input, textarea, select {
+  background: var(--color-bg-secondary);
+  color: var(--color-fg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 6px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: var(--color-bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 8px;
+}
+
+/* Accent color for links and highlights */
+a, .accent {
+  color: var(--color-accent);
+}
+
+/* Danger (e.g., error messages) */
+.danger {
+  color: var(--color-danger);
+}
+
+/* Card-like containers */
+.card {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+/* Muted text */
+.muted {
+  color: var(--color-fg-muted);
+}

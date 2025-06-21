@@ -5,93 +5,76 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/LorenzoSabatino/WASAText/service/api/reqcontext"
+	"github.com/Mortifer97/WASAText/service/api/reqcontext"
 	"github.com/julienschmidt/httprouter"
 )
 
-// ForwardMessageRequest represents the request payload for forwarding a message
+// ForwardMessageRequest rappresenta il payload della richiesta per inoltrare un messaggio
+// Handler per inoltrare un messaggio in un'altra conversazione.
+// Controlla che l'utente sia membro sia della conversazione di origine che di destinazione.
+// Si collega a ForwardMessage in database/message.go.
 type ForwardMessageRequest struct {
 	ConversationId int64 `json:"conversationId"`
 }
 
-// forwardMessage handles the API request
+// forwardMessage gestisce la richiesta API
 func (rt *_router) forwardMessage(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
-	// Extract userId, conversationId and messageId from path parameters
+	// Estrae userId, conversationId e messageId dai parametri del percorso
 	userIdStr := ps.ByName("userId")
-	userId, errUsr := strconv.ParseInt(userIdStr, 10, 64)
+	userId, _ := strconv.ParseInt(userIdStr, 10, 64)
 	conversationIdStr := ps.ByName("conversationId")
+	conversationId, _ := strconv.ParseInt(conversationIdStr, 10, 64)
 	messageIdStr := ps.ByName("messageId")
-	conversationId, err := strconv.ParseInt(conversationIdStr, 10, 64)
-	messageId, errMsg := strconv.ParseInt(messageIdStr, 10, 64)
-	if err != nil || errUsr != nil || errMsg != nil || userId <= 0 || conversationId <= 0 || messageId <= 0 {
-		ctx.Logger.WithError(err).Error("invalid userId, conversationId or messageId")
-		http.Error(w, "Invalid user, conversation or message id", http.StatusBadRequest)
+	messageId, _ := strconv.ParseInt(messageIdStr, 10, 64)
+	if userId <= 0 || conversationId <= 0 || messageId <= 0 {
+		http.Error(w, "Id non valido", http.StatusBadRequest)
 		return
 	}
 
-	// Check if the user exists
-	_, err = rt.db.GetUserById(userId)
+	// Controlla se l'utente esiste
+	_, err := rt.db.GetUserById(userId)
 	if err != nil {
-		ctx.Logger.WithError(err).Error("user not found")
-		http.Error(w, "User not found", http.StatusNotFound)
+		http.Error(w, "Utente non trovato", http.StatusNotFound)
 		return
 	}
 
-	// Check if the user is part of the conversation
+	// Controlla se l'utente è membro della conversazione
 	isMember, err := rt.db.IsUserInConversation(userId, conversationId)
-	if err != nil {
-		ctx.Logger.WithError(err).Error("error checking if user is in conversation")
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-	if !isMember {
-		ctx.Logger.Error("user is not a member of the conversation")
-		http.Error(w, "Forbidden", http.StatusForbidden)
+	if err != nil || !isMember {
+		http.Error(w, "Non autorizzato", http.StatusForbidden)
 		return
 	}
 
-	// Decode the request body
-	var forwardMessageRequest ForwardMessageRequest
-	if err := json.NewDecoder(r.Body).Decode(&forwardMessageRequest); err != nil {
-		ctx.Logger.WithError(err).Error("failed to parse request body")
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+	// Decodifica il corpo della richiesta
+	var req ForwardMessageRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Richiesta non valida", http.StatusBadRequest)
 		return
 	}
 
-	// Retrieve the original message from the database
+	// Recupera il messaggio originale dal database
 	originalMessage, err := rt.db.GetMessageById(messageId, conversationId)
 	if err != nil {
-		ctx.Logger.WithError(err).Error("message not found")
-		http.Error(w, "Original message not found", http.StatusNotFound)
+		http.Error(w, "Messaggio non trovato", http.StatusNotFound)
 		return
 	}
 
-	// Check if the user is part of the target conversation
-	isMember, err = rt.db.IsUserInConversation(userId, forwardMessageRequest.ConversationId)
+	// Controlla se l'utente è membro della conversazione di destinazione
+	isMember, err = rt.db.IsUserInConversation(userId, req.ConversationId)
+	if err != nil || !isMember {
+		http.Error(w, "Non autorizzato", http.StatusForbidden)
+		return
+	}
+
+	// Inoltra il messaggio
+	forwardedMessage, err := rt.db.ForwardMessage(userId, originalMessage, req.ConversationId)
 	if err != nil {
-		ctx.Logger.WithError(err).Error("error checking if user is in conversation")
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-	if !isMember {
-		ctx.Logger.Error("user is not a member of the conversation")
-		http.Error(w, "Forbidden", http.StatusForbidden)
+		http.Error(w, "Errore inoltro messaggio", http.StatusInternalServerError)
 		return
 	}
 
-	// Forward the message
-	forwardedMessage, err := rt.db.ForwardMessage(userId, originalMessage, forwardMessageRequest.ConversationId)
-	if err != nil {
-		ctx.Logger.WithError(err).Error("failed to forward message")
-		http.Error(w, "Failed to forward message", http.StatusInternalServerError)
-		return
-	}
-
-	// Respond with the forwarded message
+	// Risponde con il messaggio inoltrato
 	w.Header().Set("content-type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	if err := json.NewEncoder(w).Encode(forwardedMessage); err != nil {
-		ctx.Logger.WithError(err).Error("failed to encode response")
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-	}
+	json.NewEncoder(w).Encode(forwardedMessage)
 }

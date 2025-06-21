@@ -1,5 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+// App.vue: entry point principale dell'applicazione Vue.
+// Mostra la RouterView che gestisce il routing tra le varie viste.
 </script>
 <script>
 export default {}
@@ -24,4 +26,5 @@ export default {}
 </template>
 
 <style>
+@import './assets/style.css';
 </style>

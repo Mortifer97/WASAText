@@ -1,5 +1,8 @@
 // ChatView.vue
 <script>
+// Vista principale HomeView: gestisce conversazioni, selezione, ricerca, creazione gruppi, cambio nome, ecc.
+// Si collega ai servizi getMyConversations, addConversation, addToGroup, setGroupName, searchUsers.
+
 import { getMyConversations, addConversation, addToGroup, setMyUserName, setGroupName, setMyPhoto, searchUsers  } from "@/services/axios";
 import ConversationList from "@/components/ConversationList.vue";
 import ChatWindow from "@/components/ChatWindow.vue";
@@ -237,9 +240,9 @@ export default {
         <h5 class="mb-0">{{ username }}</h5>
       </div>
       <div class="col text-end">
-        <button class="btn btn-light btn-sm" @click="changeUsername">Change Username</button>
-        <button v-if="!userPhoto" class="btn btn-light btn-sm ms-2" @click="openPhotoDialog">Add Photo</button>
-        <button v-if="userPhoto" class="btn btn-light btn-sm ms-2" @click="openPhotoDialog">Change Photo</button>
+        <button class="btn btn-light btn-sm" @click="changeUsername">Cambia Nome Utente</button>
+        <button v-if="!userPhoto" class="btn btn-light btn-sm ms-2" @click="openPhotoDialog">Aggiungi Foto</button>
+        <button v-if="userPhoto" class="btn btn-light btn-sm ms-2" @click="openPhotoDialog">Cambia Foto</button>
         <button class="btn btn-danger btn-sm ms-2" @click="logout">Logout</button>
       </div>
     </div>
@@ -265,7 +268,7 @@ export default {
           @change-group-photo="refresh"
         />
         <div v-else class="h-100 d-flex align-items-center justify-content-center">
-          <p class="text-muted">Select a conversation to view messages</p>
+          <p class="text-muted">Seleziona una conversazione per visualizzare i messaggi</p>
         </div>
       </div>
 	  </div>
@@ -320,11 +323,12 @@ export default {
 </template>
 
 <style scoped>
+@import '../assets/style.css';
 .border-end {
-  border-right: 1px solid #ddd;
+  border-right: 2px solid #3b3b3b;
 }
 
 .bg-custom-gray {
-  background-color: #ddd;
+  background-color: #3b3b3b;
 }
 </style>

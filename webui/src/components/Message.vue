@@ -171,7 +171,7 @@
 
           this.$emit('message-deleted');
         } catch (error) {
-	  			console.error("Error deleating message:", error);
+	  		 console.error("Error deleating message:", error);
 			  }
       },
       findReplyMessage() {
@@ -241,7 +241,7 @@
   </script>
 
 <style scoped>
-
+@import '../assets/style.css';
   .mb-3 {
     padding: 10px;
     border-radius: 8px;
@@ -254,8 +254,8 @@
   }
 
   img {
-    max-width: 200px;
-    max-height: 200px;
+    max-width: 250px;
+    max-height: 250px;
     object-fit: contain;
   }
 
@@ -270,9 +270,8 @@
   }
 
   .btn-outline-secondary:hover {
-    background-color: #f0f0f0;
-    border-color: #ccc;
-    color: #000;
+    background-color: #000000;
+    border-color: #000000;
+    color: #ffffff;
   }
 </style>
-  

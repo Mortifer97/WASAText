@@ -14,22 +14,22 @@ export default {
       try {
         console.log("Login submitted:", this.form);
 
-        // Make the API call
+        // Effettua la chiamata all'API
         const response = await doLogin(this.form.username);
         const userId = response;
 
-        // Save the userId, username e userPhoto
+        // Salva userId, username e userPhoto
         localStorage.setItem("userId", userId);
-        console.log("Login successful, User ID:", userId);
+        console.log("Login effettuato con successo, ID utente:", userId);
         localStorage.setItem("username", this.form.username);
         localStorage.setItem("userPhoto", "");
 
 
-        // Redirect to the Home page
+        // Reindirizza alla pagina Home
         this.$router.push("/home");
       } catch (error) {
-        console.error("Login failed:", error);
-        alert("Login failed. Please try again.");
+        console.error("Login fallito:", error);
+        alert("Login fallito. Per favore riprova.");
       }
     },
   },
@@ -49,30 +49,31 @@ export default {
       <h2 class="text-center mb-2">WasaText</h2>
 
       <!-- App Description -->
-      <p class="text-center text-muted mb-4">Your instant messaging app for quick communication</p>
+      <p class="text-center text-muted mb-4">La tua app di messaggistica istantanea per comunicazioni rapide</p>
 
       <!-- Login Form -->
       <form @submit.prevent="handleSubmit">
         <div class="mb-3">
-          <label for="username" class="form-label">Username</label>
+          <label for="username" class="form-label">Nome utente</label>
           <input
             type="text"
             id="username"
             v-model="form.username"
             class="form-control"
-            placeholder="Enter your username"
+            placeholder="Inserisci il tuo nome utente"
             required
           />
         </div>
-        <button type="submit" class="btn btn-primary w-100">Login</button>
+        <button type="submit" class="btn btn-primary w-100">Accedi</button>
       </form>
     </div>
   </div>
 </template>
 
 <style scoped>
+@import '../assets/style.css';
 .container {
-  background-color: #f8f9fa;
+  background-color: #000000;
 }
 
 .logo-img {
@@ -80,13 +81,13 @@ export default {
   height: 150px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #175156;
+  border: 3px solid #010202;
 }
 
 h2 {
   font-size: 2rem;
   font-weight: bold;
-  color: #333;
+  color: #494949;
 }
 
 p {

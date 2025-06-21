@@ -287,3 +287,7 @@ const setAuthHeader = (userId) => {
   
 
 export default instance;
+
+// Servizi axios per chiamate API backend.
+// Ogni funzione corrisponde a una rotta del backend (login, conversazioni, messaggi, gruppi, utenti).
+// Esempio: sendMessage chiama la rotta POST /users/:userId/conversations/:conversationId/messages/.
